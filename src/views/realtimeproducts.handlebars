@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+</head>
+
+<body>
+    <h1>Productos Disponibles</h1>
+    <p>Busca y agrega al carrito tus elecciones:</p>
+    <form id="addForm">
+        <input name="nombre" placeholder="nombre" required />
+        <input name="descripcion" placeholder="descripcion" />
+        <input name="precio" placeholder="precio" type="number" step="0.01" required />
+        <input name="stock" placeholder="stock" type="number" required />
+        <button type="submit">Agregar</button>
+    </form>
+
+    <p>PRENDAS DISPONIBLES CON STOCK LIMITADO:</p>
+    <ul id="productsList"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on('products', (products) => {
+            const ul = document.getElementById('productsList');
+            ul.innerHTML = '';
+            products.forEach(p => {
+                const li = document.createElement('li');
+                const id = p._id || p.id || p._doc && p._doc._id;
+                li.innerText = `${id} - ${p.nombre} - $${p.precio}`;
+
+                const delBtn = document.createElement('button');
+                delBtn.innerText = 'Eliminar';
+                delBtn.style.marginLeft = '8px';
+                delBtn.onclick = () => {
+                    socket.emit('deleteProduct', id);
+                };
+
+                li.appendChild(delBtn);
+                ul.appendChild(li);
+            });
+        });
+
+        // submit new product via socket
+        const form = document.getElementById('addForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const product = {
+                nombre: formData.get('nombre'),
+                descripcion: formData.get('descripcion'),
+                precio: parseFloat(formData.get('precio')),
+                stock: parseInt(formData.get('stock'), 10)
+            };
+            socket.emit('newProduct', product);
+            form.reset();
+        });
+    </script>
+</body>
+
+</html>

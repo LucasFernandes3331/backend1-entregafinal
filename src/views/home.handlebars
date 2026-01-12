@@ -1,0 +1,15 @@
+<h1>Productos</h1>
+<p>Prendas disponibles!!</p>
+
+{{#if products}}
+    {{#each products}}
+    <div style="border: 1px solid black; padding: 10px; margin: 10px 0;">
+        <strong>{{this.nombre}}</strong> - ${{this.precio}}
+        <br>ID: {{this._id}}
+    </div>
+    {{/each}}
+{{else}}
+    <p style="color: red;">NO HAY PRODUCTOS</p>
+{{/if}}
+
+<button><a href="/realtimeproducts">Ir a productos...</a></button>
