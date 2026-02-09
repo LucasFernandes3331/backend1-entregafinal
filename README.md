@@ -1,23 +1,55 @@
-# SERVIDOR EN NODE.js CON EXPRESS
+# SERVIDOR EN NODE.js CON EXPRESS + AUTENTICACIÓN
 
 Proyecto de pre-entrega — Introducción a Backend 1 (Coderhouse)
 
-Descripción
+## Descripción
 - Servidor con Express y vistas en Handlebars.
 - Persistencia con MongoDB (Mongoose).
 - Actualización en tiempo real de productos con Socket.io.
+- **Sistema completo de Autenticación y Autorización con JWT**
+- **Modelo de Usuario con encriptación de contraseña (bcrypt)**
+- **Estrategias Passport para Login y Validación**
 
-Estructura principal
+## Estructura principal
 
 - `src/`
-	- `app.js` - configuración de Express, vistas y rutas
+	- `app.js` - configuración de Express, Passport, vistas y rutas
 	- `servidor.js` - servidor HTTP y configuración de `socket.io`
-	- `controllers/` - lógica que orquesta managers (productos, carritos)
+	- `config/` - configuración de Passport y estrategias JWT
+	- `controllers/` - lógica que orquesta managers (productos, carritos, usuarios)
 	- `managers/` - acceso a datos (Mongoose models)
-	- `models/` - esquemas Mongoose (`Product`, `Cart`)
-	- `rutas/` - rutas API para `products` y `carts`
+	- `middleware/` - middleware de autenticación
+	- `models/` - esquemas Mongoose (`Product`, `Cart`, `User`)
+	- `rutas/` - rutas API para productos, carritos, usuarios, autenticación y sesiones
 	- `views/` - plantillas Handlebars (home, realtimeproducts, productDetail, cartDetail)
 - `data/` - JSON de ejemplo (no usado cuando se usa MongoDB)
+
+## Nuevas Características - Autenticación y Autorización
+
+### Modelo de Usuario
+- **first_name**: String (requerido)
+- **last_name**: String (requerido)
+- **email**: String (requerido, único)
+- **age**: Number
+- **password**: String (encriptado con bcrypt)
+- **cart**: ObjectId referencia a Cart
+- **role**: String (por defecto: 'user')
+
+### Endpoints Principales
+
+#### Autenticación (`/api/auth`)
+- `POST /api/auth/register` - Registrar nuevo usuario
+- `POST /api/auth/login` - Login con email y contraseña
+- `POST /api/auth/logout` - Cerrar sesión
+
+#### Sesiones (`/api/sessions`)
+- `GET /api/sessions/current` - Obtener datos del usuario logueado
+
+#### Usuarios (`/api/users`) 
+- `GET /api/users` - Obtener todos los usuarios (admin)
+- `GET /api/users/:id` - Obtener usuario por ID
+- `PUT /api/users/:id` - Actualizar usuario
+- `DELETE /api/users/:id` - Eliminar usuario (admin)
 
 Vistas principales
 - `/` - listado de productos (home)

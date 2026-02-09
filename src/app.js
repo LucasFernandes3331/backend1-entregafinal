@@ -2,6 +2,8 @@ const express = require("express");
 const { engine } = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const { passport } = require('./config/passport');
 const app = express();
 
 // conexión a mongodb
@@ -11,6 +13,8 @@ mongoose.connect('mongodb://localhost:27017/coder-fernandes')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(passport.initialize());
 
 app.engine('handlebars', engine({
     layoutsDir: path.join(__dirname, 'views', 'layouts'),
@@ -24,9 +28,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 // rutas de api
 const productsRouter = require("./rutas/products-rutas");
 const cartsRouter = require("./rutas/carts-rutas");
+const authRouter = require("./rutas/auth-rutas");
+const sessionsRouter = require("./rutas/sessions-rutas");
+const usersRouter = require("./rutas/users-rutas");
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/sessions", sessionsRouter);
+app.use("/api/users", usersRouter);
 
 // DEBUG: endpoint para ver los productos crudos
 app.get("/api/debug/products", async (req, res) => {
