@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const { requireAuth, isAdmin } = require('../middleware/authMiddleware');
 
 // metodos CRUD para productos
 // metodo gets
@@ -21,8 +22,8 @@ router.get('/:pid', async (req, res) => {
     } catch (e) { res.status(500).json({ error: 'Error fetching product' }); }
 });
 
-//metodos post put delete
-router.post('/', async (req, res) => {
+//metodos post put delete - solo admin
+router.post('/', requireAuth, isAdmin, async (req, res) => {
     try {
         const newProduct = await productController.create(req.body);
         const io = req.app.get('io');
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
     } catch (e) { res.status(500).json({ error: 'Error adding product' }); }
 });
 
-router.put('/:pid', async (req, res) => {
+router.put('/:pid', requireAuth, isAdmin, async (req, res) => {
     try {
         const pid = req.params.pid;
         const updated = await productController.update(pid, req.body);
@@ -41,7 +42,7 @@ router.put('/:pid', async (req, res) => {
     } catch (e) { res.status(500).json({ error: 'Error updating product' }); }
 });
 
-router.delete('/:pid', async (req, res) => {
+router.delete('/:pid', requireAuth, isAdmin, async (req, res) => {
     try {
         const pid = req.params.pid;
         const deleted = await productController.remove(pid);

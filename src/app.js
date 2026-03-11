@@ -31,12 +31,14 @@ const cartsRouter = require("./rutas/carts-rutas");
 const authRouter = require("./rutas/auth-rutas");
 const sessionsRouter = require("./rutas/sessions-rutas");
 const usersRouter = require("./rutas/users-rutas");
+const ticketsRouter = require("./rutas/tickets-rutas");
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/tickets", ticketsRouter);
 
 // DEBUG: endpoint para ver los productos crudos
 app.get("/api/debug/products", async (req, res) => {
