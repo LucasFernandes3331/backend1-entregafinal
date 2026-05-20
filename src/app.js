@@ -7,9 +7,11 @@ const { passport } = require('./config/passport');
 const app = express();
 
 // conexión a mongodb
-mongoose.connect('mongodb://localhost:27017/coder-fernandes')
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.error('Error conectando a MongoDB:', err));
+if (process.env.NODE_ENV !== 'test') {
+  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/coder-fernandes')
+    .then(() => console.log('Conectado a MongoDB'))
+    .catch(err => console.error('Error conectando a MongoDB:', err));
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
