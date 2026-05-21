@@ -10,5 +10,3 @@ __tests__
 .env.local
 .env.development
 .env.test
-*.md
-*.log
