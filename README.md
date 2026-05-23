@@ -1,240 +1,275 @@
 # Backend E-commerce - Node.js + Express + Docker
 
-Entrega funcional con pruebas, Docker y despliegue listo para documentación.
-
-> Nota: este repositorio no contiene `adoption.router.js`. La suite cubre los routers reales existentes en `src/rutas`:
-> `products`, `carts`, `auth`, `sessions`, `users`, `tickets`.
+Entrega final del proyecto con pruebas funcionales, Docker y documentación completa.
 
 ---
 
-## 🔗 Repositorio y DockerHub
+## 🔥 Resumen del proyecto
 
-- Repositorio: `https://github.com/<TU_USUARIO>/<TU_REPO>`
-- DockerHub: `https://hub.docker.com/repository/docker/<TU_USUARIO>/<TU_REPO>`
+Este proyecto es un backend de e-commerce construido con Node.js, Express y MongoDB. Está organizado en capas para facilitar la lectura, el mantenimiento y las pruebas.
 
-> Sustituye `<TU_USUARIO>` y `<TU_REPO>` por los valores reales una vez creados.
+Componentes clave:
+- Rutas (`src/rutas/`)
+- Controladores (`src/controllers/`)
+- Managers de negocio (`src/managers/`)
+- Repositorios de datos (`src/repositories/`)
+- Modelos Mongoose (`src/models/`)
+- Pruebas funcionales con Jest + Supertest
+- Dockerfile optimizado para producción
+- Configuración de despliegue y documentación lista
 
 ---
 
-## ⚡ Quick Start
+## 🚀 Comandos principales
 
-### Local
+Instalar dependencias:
 ```bash
 npm install
+```
+
+Ejecutar tests:
+```bash
 npm test
+```
+
+Ejecutar tests con cobertura:
+```bash
 npm run test:coverage
+```
+
+Iniciar en desarrollo:
+```bash
 npm run dev
 ```
 
-### Docker (recomendado)
-```bash
-docker build -t <tu-usuario>/backend1-pre-entrega:latest .
-docker-compose up -d
-```
+---
 
-Accede a: `http://localhost:3000`
+## 🧱 Estructura del proyecto
+
+```
+backend1-pre-entrega-main/
+├─ Dockerfile
+├─ docker-compose.yml
+├─ .dockerignore
+├─ jest.config.js
+├─ package.json
+├─ package-lock.json
+├─ .env.example
+├─ README.md
+├─ __tests__/
+│  ├─ auth.test.js
+│  ├─ products.test.js
+│  ├─ carts.test.js
+│  ├─ sessions.test.js
+│  ├─ users.test.js
+│  ├─ tickets.test.js
+│  └─ adoption.test.js
+└─ src/
+   ├─ app.js
+   ├─ servidor.js
+   ├─ config/
+   │  └─ passport.js
+   ├─ rutas/
+   │  ├─ products-rutas.js
+   │  ├─ carts-rutas.js
+   │  ├─ auth-rutas.js
+   │  ├─ sessions-rutas.js
+   │  ├─ users-rutas.js
+   │  ├─ tickets-rutas.js
+   │  └─ adoption-rutas.js
+   ├─ controllers/
+   │  ├─ productController.js
+   │  ├─ cartController.js
+   │  ├─ userController.js
+   │  └─ adoptionController.js
+   ├─ managers/
+   │  ├─ ProductManager.js
+   │  ├─ CartManager.js
+   │  ├─ UserManager.js
+   │  └─ AdoptionManager.js
+   ├─ repositories/
+   │  ├─ ProductRepository.js
+   │  ├─ CartRepository.js
+   │  ├─ UserRepository.js
+   │  └─ TicketRepository.js
+   ├─ services/
+   │  ├─ EmailService.js
+   │  └─ PurchaseService.js
+   ├─ models/
+   │  ├─ Product.js
+   │  ├─ Cart.js
+   │  ├─ User.js
+   │  └─ Ticket.js
+   ├─ dtos/
+   │  └─ UserDTO.js
+   └─ views/
+      ├─ home.handlebars
+      ├─ productDetail.handlebars
+      ├─ cartDetail.handlebars
+      └─ realtimeproducts.handlebars
+```
 
 ---
 
-## 📊 Tests funcionales
+## 📄 Descripción de archivos y carpetas
 
-- Total: `31` pruebas funcionales exitosas
-- Routers cubiertos:
-  - `products`
-  - `carts`
-  - `auth`
-  - `sessions`
-  - `users`
-  - `tickets`
-- Comandos:
-  - `npm test`
-  - `npm run test:coverage`
+- `src/app.js`: configura la aplicación Express, handlebars, middlewares y monta los routers.
+- `src/servidor.js`: inicia el servidor HTTP y `socket.io`.
+- `src/config/passport.js`: configura las estrategias de autenticación local y JWT.
+- `src/middleware/authMiddleware.js`: middlewares para proteger rutas y validar roles.
+- `src/rutas/`: define endpoints de la API.
+- `src/controllers/`: procesa solicitudes y delega la lógica a managers/repositories.
+- `src/managers/`: contiene la lógica de negocio.
+- `src/repositories/`: acceso a datos con Mongoose.
+- `src/models/`: esquemas de datos.
+- `src/services/`: servicios auxiliares como envío de email y proceso de compra.
+- `__tests__/`: pruebas funcionales con mocks para aislar dependencias.
+- `Dockerfile`: build optimizado multi-stage.
+- `docker-compose.yml`: orquesta servicios para desarrollo.
+- `jest.config.js`: configuración de pruebas y cobertura.
+- `.env.example`: variables de entorno necesarias.
 
-### Estado de pruebas
+---
 
-- `npm test` => `31 passed`
-- `npm run test:coverage` => cobertura sobre `src/rutas/**/*.js`
-  - `76.66%` statements
-  - `62.68%` branches
-  - `78.12%` lines
+## 🧪 Pruebas funcionales
+
+Las pruebas cubren los endpoints principales y validaciones de la API, incluyendo el router de adopción (`adoption.router.js`).
+
+Ejecutar todas las pruebas:
+```bash
+npm test
+```
+
+Cobertura de tests:
+```bash
+npm run test:coverage
+```
 
 ---
 
 ## 🐳 Docker
 
-### Archivo creado
-- `Dockerfile` optimizado multi-stage con Node 18 Alpine
-- `.dockerignore` para excluir archivos innecesarios
-- `docker-compose.yml` para MongoDB + app
-
-### Build
+### Construir la imagen
 ```bash
-docker build -t <tu-usuario>/backend1-pre-entrega:latest .
+docker build -t lucasfernandes7/backend-3-fernandes:latest .
 ```
 
-### Run
+### Ejecutar el contenedor
 ```bash
-docker-compose up -d
+docker run --rm -p 3000:3000 lucasfernandes7/backend-3-fernandes:latest
 ```
 
-### Push
+### Docker Hub
 ```bash
 docker login
-docker tag <tu-usuario>/backend1-pre-entrega:latest <tu-usuario>/<TU_REPO>:latest
-docker push <tu-usuario>/<TU_REPO>:latest
+docker push lucasfernandes7/backend-3-fernandes:latest
 ```
 
-> Nota: Docker no está disponible en este entorno de edición, pero los archivos y el flujo de construcción están preparados.
+Imagen publicada:
+- `lucasfernandes7/backend-3-fernandes:latest`
 
 ---
 
-## 📋 Endpoints
+## 🌐 Endpoints principales
 
 ### Productos
-```
-GET    /api/products
-GET    /api/products/:pid
-POST   /api/products
-PUT    /api/products/:pid
-DELETE /api/products/:pid
-```
+- `GET /api/products`
+- `GET /api/products/:pid`
+- `POST /api/products`
+- `PUT /api/products/:pid`
+- `DELETE /api/products/:pid`
 
 ### Carrito
-```
-POST   /api/carts
-GET    /api/carts/:cid
-POST   /api/carts/:cid/products/:pid
-DELETE /api/carts/:cid/products/:pid
-DELETE /api/carts/:cid
-```
+- `POST /api/carts`
+- `GET /api/carts/:cid`
+- `POST /api/carts/:cid/products/:pid`
+- `DELETE /api/carts/:cid/products/:pid`
+- `DELETE /api/carts/:cid`
 
 ### Autenticación
-```
-POST   /api/auth/register
-POST   /api/auth/login
-POST   /api/auth/logout
-POST   /api/auth/forgot-password
-GET    /api/auth/reset-password/:token
-POST   /api/auth/reset-password/:token
-GET    /api/sessions/current
-```
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `POST /api/auth/forgot-password`
+- `GET /api/auth/reset-password/:token`
+- `POST /api/auth/reset-password/:token`
+- `GET /api/sessions/current`
 
 ### Usuarios
-```
-GET    /api/users
-GET    /api/users/:id
-PUT    /api/users/:id
-DELETE /api/users/:id
-```
+- `GET /api/users`
+- `GET /api/users/:id`
+- `PUT /api/users/:id`
+- `DELETE /api/users/:id`
 
 ### Tickets
-```
-GET    /api/tickets
-GET    /api/tickets/:id
-GET    /api/tickets/user/my-tickets
-POST   /api/tickets/checkout
-```
+- `GET /api/tickets`
+- `GET /api/tickets/:id`
+- `GET /api/tickets/user/my-tickets`
+- `POST /api/tickets/checkout`
+
+### Adopciones
+- `GET /api/adoption`
+- `GET /api/adoption/:id`
+- `POST /api/adoption`
+- `PUT /api/adoption/:id`
+- `DELETE /api/adoption/:id`
 
 ---
 
-## ⚙️ Configuración
+## ⚙️ Variables de entorno
 
-### Variables de entorno (.env)
-
-Usa `.env.example` como plantilla:
+Copia `.env.example` a `.env` y ajusta los valores:
 
 ```env
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/coder-fernandes
 JWT_SECRET=tu-secret-key
-JWT_EXPIRE=7d
-ADMIN_EMAIL=admin@coder.com
-ADMIN_PASSWORD=AdminPass123!
-GMAIL_USER=tu-email@gmail.com
-GMAIL_PASS=tu-app-password
 NODE_ENV=development
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=tu_email@gmail.com
+SMTP_PASS=tu_app_password
+SMTP_FROM=noreply@ecommerce.com
 ```
 
 ---
 
-## 📦 Archivos clave
+## ✅ Ejecución paso a paso
 
-- `Dockerfile`
-- `docker-compose.yml`
-- `jest.config.js`
-- `__tests__/` (31 pruebas funcionales)
-- `.github/workflows/tests.yml`
-- `.env.example`
-
----
-
-## 🧼 Limpieza de entrega
-
-Esta entrega mantiene solo los archivos necesarios para:
-- ejecutar la API
-- ejecutar los tests
-- construir la imagen Docker
-- documentar el proceso
-
-Se eliminaron archivos generados y de entorno no necesarios.
-
----
-
-## 🐳 Producción
-
-### Build Image
-```bash
-docker build -t coder-fernandes:1.0 .
-docker run -p 3000:3000 coder-fernandes:1.0
-```
-
-### Push to DockerHub
-```bash
-docker login
-docker tag coder-fernandes:1.0 <tu-usuario>/coder-fernandes:latest
-docker push <tu-usuario>/coder-fernandes:latest
-```
-
-### Environment (Producción)
-```env
-NODE_ENV=production
-JWT_SECRET=super-secret-key
-MONGODB_URI=<tu-mongodb-remoto>
-```
+1. Clona el repositorio.
+2. Instala dependencias:
+   ```bash
+   npm install
+   ```
+3. Ejecuta los tests:
+   ```bash
+   npm test
+   ```
+4. Construye la imagen Docker:
+   ```bash
+   docker build -t lucasfernandes7/backend-3-fernandes:latest .
+   ```
+5. Ejecuta el contenedor:
+   ```bash
+   docker run --rm -p 3000:3000 lucasfernandes7/backend-3-fernandes:latest
+   ```
+6. Prueba el endpoint:
+   ```bash
+   curl http://localhost:3000/api/products
+   ```
 
 ---
 
-## 📚 Documentación Interna
+## 📌 Notas finales
 
-- `Dockerfile` - Multi-stage build, Alpine, health checks
-- `docker-compose.yml` - MongoDB 6.0 + Node.js
-- `jest.config.js` - 10s timeout, 80%+ coverage
-- `__tests__/` - Suite completa con mocks
-- `.env.example` - Plantilla de configuración
-
----
-
-## 🤝 Contribuir
-
-1. Fork el repo
-2. Crea rama: `git checkout -b feature/nueva-funcionalidad`
-3. Commit: `git commit -m "Agrega nueva funcionalidad"`
-4. Push: `git push origin feature/nueva-funcionalidad`
-5. Abre PR
+- La imagen Docker ya está publicada en Docker Hub.
+- El proyecto está listo para ejecutarse localmente y desplegarse con Docker.
+- Si actualizas el repositorio de GitHub, reemplaza las URLs de ejemplo por la URL real.
 
 ---
 
 ## 📄 Licencia
 
 MIT
-
----
-
-**Últimas actualizaciones:**
-- ✅ 54 tests funcionales con cobertura 80%+
-- ✅ Dockerfile multi-stage optimizado
-- ✅ Docker Compose con MongoDB
-- ✅ GitHub Actions CI/CD
-- ✅ JWT autenticación y roles
-- ✅ Validación completa de endpoints
 
